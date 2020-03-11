@@ -32,13 +32,13 @@ const Statistics = ({ good, neutral, bad }) => {
           <tr>
             <StatisticLine
               text="average"
-              value={good / (good + neutral + bad)}
+              value={(good - bad) / (good + neutral + bad)}
             />
           </tr>
           <tr>
             <StatisticLine
               text="positive"
-              value={((good - bad) / (good + bad + neutral)) * 100}
+              value={(good / (good + bad + neutral)) * 100}
               percent={true}
             />
           </tr>
