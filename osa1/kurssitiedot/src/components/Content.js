@@ -5,9 +5,9 @@ import Part from "./Part"
 const Content = (props) => {
   return (
     <div>
-        <Part {...props.part1} />
-        <Part {...props.part2} />
-        <Part {...props.part3} />
+        <Part {...props.parts[0]} />
+        <Part {...props.parts[1]} />
+        <Part {...props.parts[2]} />
     </div>
   );
 };
