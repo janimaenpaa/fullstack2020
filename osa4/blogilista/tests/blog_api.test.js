@@ -105,6 +105,18 @@ test("if likes is not set, set likes to 0", async () => {
   expect(likes[0]).toEqual(0)
 })
 
+test("if title or url are undefined responds with status 400", async () => {
+  const newBlog = {
+    author: "Matti Meikäläinen"
+  }
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(400)
+    .expect("Content-Type", /application\/json/)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
