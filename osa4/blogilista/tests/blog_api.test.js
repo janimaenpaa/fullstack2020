@@ -61,6 +61,50 @@ test("id attributes are defined", async () => {
   expect(ids).toBeDefined()
 })
 
+test("a blog can be added", async () => {
+  const newBlog = {
+    title: "A new blog",
+    author: "Matti Meikäläinen",
+    url: "www.google.com",
+    likes: 10
+  }
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/)
+
+  const response = await api.get("/api/blogs")
+
+  const contents = response.body.map(r => r.title)
+
+  expect(response.body).toHaveLength(initialBlogs.length + 1)
+  expect(contents).toContain("A new blog")
+})
+
+test("if likes is not set, set likes to 0", async () => {
+  const newBlog = {
+    title: "A new blog for testing likes",
+    author: "Matti Meikäläinen",
+    url: "www.google.com"
+  }
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/)
+
+  const response = await api.get("/api/blogs")
+
+  const likes = response.body
+    .filter(r => r.title === "A new blog for testing likes")
+    .map(r => r.likes)
+
+  expect(likes[0]).toEqual(0)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })

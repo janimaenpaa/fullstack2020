@@ -8,7 +8,6 @@ mongoose.connect(config.MONGODB_URI, {
 })
 
 const blogSchema = mongoose.Schema({
-  
   title: String,
   author: String,
   url: String,

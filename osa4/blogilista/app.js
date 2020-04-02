@@ -23,6 +23,10 @@ app.get("/api/blogs", (request, response) => {
 })
 
 app.post("/api/blogs", (request, response) => {
+  if (request.body.likes === undefined) {
+    request.body.likes = 0
+  }
+
   const blog = new Blog(request.body)
 
   blog.save().then(result => {
