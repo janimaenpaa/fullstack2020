@@ -102,7 +102,7 @@ test("if likes is not set, set likes to 0", async () => {
     .filter(r => r.title === "A new blog for testing likes")
     .map(r => r.likes)
 
-  expect(likes[0]).toEqual(0)
+  expect(likes[0]).toBe(0)
 })
 
 test("if title or url are undefined responds with status 400", async () => {
