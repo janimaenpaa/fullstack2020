@@ -1,14 +1,6 @@
 const blogsRouter = require("express").Router()
 const jwt = require("jsonwebtoken")
 
-const getTokenFrom = (request) => {
-  const authorization = request.get("authorization")
-  if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
-    return authorization.substring(7)
-  }
-  return null
-}
-
 const Blog = require("../models/blog")
 const User = require("../models/user")
 
@@ -23,11 +15,10 @@ blogsRouter.get("/", async (request, response) => {
 
 blogsRouter.post("/", async (request, response, next) => {
   const body = request.body
-  const token = getTokenFrom(request)
 
   try {
-    const decodedToken = jwt.verify(token, process.env.SECRET)
-    if (!token || !decodedToken.id) {
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    if (!request.token || !decodedToken.id) {
       return response.status(401).json({ error: "token missing or invalid" })
     }
 
@@ -38,6 +29,7 @@ blogsRouter.post("/", async (request, response, next) => {
     if (body.likes === undefined) {
       body.likes = 0
     }
+
     const user = await User.findById(decodedToken.id)
 
     const blog = new Blog({
@@ -51,19 +43,39 @@ blogsRouter.post("/", async (request, response, next) => {
     const savedBlog = await blog.save()
     user.blogs = user.blogs.concat(savedBlog._id)
     await user.save()
-
     response.json(savedBlog.toJSON())
   } catch (error) {
     next(error)
   }
 })
 
-blogsRouter.delete("/:id", async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id)
-  response.status(204).end()
+blogsRouter.delete("/:id", async (request, response, next) => {
+  try {
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    if (!request.token || !decodedToken.id) {
+      return response.status(401).json({ error: "token missing or invalid" })
+    }
+
+    const blog = await Blog.findById(request.params.id)
+
+    if (blog === null) {
+      return response.status(404).json({ error: "blog not found" })
+    }
+
+    const user = await User.findById(decodedToken.id)
+
+    if (blog.user.toString() === user.id.toString()) {
+      const deletedBlog = await blog.delete()
+      response.json(deletedBlog)
+    } else {
+      return response.status(401).json({ error: "token missing or invalid" })
+    }
+  } catch (error) {
+    next(error)
+  }
 })
 
-blogsRouter.put("/:id", async (request, response) => {
+blogsRouter.put("/:id", async (request, response, next) => {
   const body = request.body
 
   const blog = {
@@ -75,9 +87,9 @@ blogsRouter.put("/:id", async (request, response) => {
 
   try {
     await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
-    response.status(200).json({ message: "blog updated" })
+    response.status(200).json(blog)
   } catch (err) {
-    response.status(500).json(err.message)
+    next(err)
   }
 })
 
