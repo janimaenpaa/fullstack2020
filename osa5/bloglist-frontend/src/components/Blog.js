@@ -2,7 +2,7 @@ import React, { useState } from "react"
 
 import blogService from "../services/blogs"
 
-const Blog = ({ blog, blogs, setBlogs, setErrorMessage }) => {
+const Blog = ({ blog, blogs, setBlogs, user, setErrorMessage }) => {
   const [blogVisible, setBlogVisible] = useState(false)
 
   const blogStyle = {
@@ -12,29 +12,7 @@ const Blog = ({ blog, blogs, setBlogs, setErrorMessage }) => {
     borderWidth: 1,
     marginTop: 5,
   }
-
-  const showWhenNotVisible = () => (
-    <div style={blogStyle}>
-      <div>
-        {blog.title} {blog.author}{" "}
-        <button onClick={() => setBlogVisible(true)}>view</button>
-      </div>
-    </div>
-  )
-
-  const showWhenVisible = () => (
-    <div style={blogStyle}>
-      {blog.title} {blog.author}{" "}
-      <button onClick={() => setBlogVisible(false)}>hide</button> <br />
-      {blog.url} <br />
-      likes {blog.likes} <button onClick={handleLike}>like</button>
-      <br />
-      {blog.user.name} <br />
-      <button>remove</button>
-    </div>
-  )
-
-  const handleLike = async (event) => {
+  const handleLike = async () => {
     try {
       const id = blog.id
 
@@ -57,6 +35,40 @@ const Blog = ({ blog, blogs, setBlogs, setErrorMessage }) => {
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
+    }
+  }
+
+  const handleRemove = async () => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      const deletedBlog = await blogService.remove(blog.id)
+      setBlogs(blogs.filter((blog) => blog.id !== deletedBlog.id))
+    }
+  }
+
+  const showWhenNotVisible = () => (
+    <div style={blogStyle}>
+      <div>
+        {blog.title} {blog.author}{" "}
+        <button onClick={() => setBlogVisible(true)}>view</button>
+      </div>
+    </div>
+  )
+
+  const showWhenVisible = () => (
+    <div style={blogStyle}>
+      {blog.title} {blog.author}{" "}
+      <button onClick={() => setBlogVisible(false)}>hide</button> <br />
+      {blog.url} <br />
+      likes {blog.likes} <button onClick={handleLike}>like</button>
+      <br />
+      {blog.user.name} <br />
+      {removeButton()}
+    </div>
+  )
+
+  const removeButton = () => {
+    if (blog.user.username === user.username) {
+      return <button onClick={handleRemove}>remove</button>
     }
   }
 
