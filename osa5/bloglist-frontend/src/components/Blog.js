@@ -66,14 +66,12 @@ const Blog = ({ blog, blogs, setBlogs, user, setErrorMessage }) => {
       </button>
       <br />
       {blog.user.name} <br />
-      {removeButton()}
+      {blog.user.username === user.username ? removeButton() : ""}
     </div>
   )
 
   const removeButton = () => {
-    if (blog.user.username === user.username) {
-      return <button onClick={handleRemove}>remove</button>
-    }
+      return <button id="removeBlog" onClick={handleRemove}>remove</button>
   }
 
   return (
