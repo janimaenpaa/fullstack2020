@@ -12,6 +12,7 @@ const Blog = ({ blog, blogs, setBlogs, user, setErrorMessage }) => {
     borderWidth: 1,
     marginTop: 5,
   }
+
   const handleLike = async () => {
     try {
       const id = blog.id
@@ -59,7 +60,10 @@ const Blog = ({ blog, blogs, setBlogs, user, setErrorMessage }) => {
       {blog.title} {blog.author}{" "}
       <button onClick={() => setBlogVisible(false)}>hide</button> <br />
       {blog.url} <br />
-      likes {blog.likes} <button onClick={handleLike}>like</button>
+      likes <span className="likes">{blog.likes}</span>{" "}
+      <button className="likeButton" onClick={handleLike}>
+        like
+      </button>
       <br />
       {blog.user.name} <br />
       {removeButton()}
@@ -73,7 +77,7 @@ const Blog = ({ blog, blogs, setBlogs, user, setErrorMessage }) => {
   }
 
   return (
-    <div>
+    <div className="blog">
       {!blogVisible && showWhenNotVisible()}
       {blogVisible && showWhenVisible()}
     </div>
