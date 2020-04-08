@@ -62,6 +62,11 @@ const App = () => {
     }
   }
 
+  const handleLogout = () => {
+    window.localStorage.removeItem("loggedBloglistUser")
+    setUser(null)
+  }
+
   const addBlog = async (blogObject) => {
     try {
       blogFormRef.current.toggleVisibility()
@@ -78,11 +83,6 @@ const App = () => {
         setErrorMessage(null)
       }, 5000)
     }
-  }
-
-  const handleLogout = () => {
-    window.localStorage.removeItem("loggedBloglistUser")
-    setUser(null)
   }
 
   const blogFormRef = React.createRef()
