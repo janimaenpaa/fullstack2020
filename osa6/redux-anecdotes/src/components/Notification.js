@@ -25,7 +25,6 @@ const Notification = () => {
   return (
     <div style={style}>
       {notification}
-      {reset()}
     </div>
   )
 }
