@@ -6,7 +6,12 @@ import Notification from "./components/Notification"
 import Togglable from "./components/Togglable"
 import NewBlog from "./components/NewBlog"
 import { setNotification } from "./reducers/notificationReducer"
-import { initializeBlogs, createBlog } from "./reducers/blogReducer"
+import {
+  initializeBlogs,
+  createBlog,
+  likeBlog,
+  removeBlog,
+} from "./reducers/blogReducer"
 
 import loginService from "./services/login"
 import storage from "./utils/storage"
@@ -66,31 +71,31 @@ const App = () => {
     }
   }
 
-  /*   const handleLike = async (id) => {
+  const handleLike = async (id) => {
     const blogToLike = blogs.find((b) => b.id === id)
     const likedBlog = {
       ...blogToLike,
       likes: blogToLike.likes + 1,
       user: blogToLike.user.id,
     }
-    await blogService.update(likedBlog)
+    dispatch(likeBlog(likedBlog))
+    /* await blogService.update(likedBlog)
     setBlogs(
       blogs.map((b) =>
         b.id === id ? { ...blogToLike, likes: blogToLike.likes + 1 } : b
       )
-    )
-  } */
+    ) */
+  }
 
-  /*   const handleRemove = async (id) => {
+  const handleRemove = async (id) => {
     const blogToRemove = blogs.find((b) => b.id === id)
     const ok = window.confirm(
       `Remove blog ${blogToRemove.title} by ${blogToRemove.author}`
     )
     if (ok) {
-      await blogService.remove(id)
-      setBlogs(blogs.filter((b) => b.id !== id))
+      dispatch(removeBlog(id))
     }
-  } */
+  }
 
   const handleLogout = () => {
     setUser(null)
@@ -147,8 +152,8 @@ const App = () => {
         <Blog
           key={blog.id}
           blog={blog}
-          // handleLike={handleLike}
-          // handleRemove={handleRemove}
+          handleLike={handleLike}
+          handleRemove={handleRemove}
           own={user.username === blog.user.username}
         />
       ))}
@@ -156,4 +161,4 @@ const App = () => {
   )
 }
 
-export default connect(null, { setNotification, createBlog })(App)
+export default connect(null, { setNotification, createBlog, likeBlog })(App)
