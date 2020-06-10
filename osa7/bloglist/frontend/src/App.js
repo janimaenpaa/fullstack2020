@@ -27,9 +27,6 @@ const App = () => {
     return user
   })
 
-  console.log(user)
-  console.log(blogs)
-
   const blogFormRef = React.createRef()
   const dispatch = useDispatch()
 

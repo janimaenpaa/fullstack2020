@@ -20,6 +20,7 @@ export const login = (credentials) => {
         type: "LOGIN",
         data: user,
       })
+      
       storage.saveUser(user)
     } catch (error) {
       console.log(error)
