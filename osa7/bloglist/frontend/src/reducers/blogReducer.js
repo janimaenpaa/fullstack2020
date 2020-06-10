@@ -32,7 +32,7 @@ export const initializeBlogs = () => {
 
 export const createBlog = (blog) => {
   return async (dispatch) => {
-    const newBlog = await blogService.create(blog)
+    await blogService.create(blog)
     dispatch({
       type: "CREATE",
       data: blog,

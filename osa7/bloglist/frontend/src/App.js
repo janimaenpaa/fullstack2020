@@ -12,14 +12,23 @@ import {
   likeBlog,
   removeBlog,
 } from "./reducers/blogReducer"
-
-import loginService from "./services/login"
+import { login, logout, setUser } from "./reducers/userReducer"
 import storage from "./utils/storage"
 
 const App = () => {
-  const [user, setUser] = useState(null)
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+
+  const blogs = useSelector(({ blogs }) => {
+    return blogs
+  })
+
+  const user = useSelector(({ user }) => {
+    return user
+  })
+
+  console.log(user)
+  console.log(blogs)
 
   const blogFormRef = React.createRef()
   const dispatch = useDispatch()
@@ -28,29 +37,24 @@ const App = () => {
     dispatch(initializeBlogs())
   }, [dispatch])
 
-  const blogs = useSelector(({ blogs }) => {
-    return blogs
-  })
-
   useEffect(() => {
-    const user = storage.loadUser()
-    setUser(user)
-  }, [])
+    const loginUser = storage.loadUser()
+    dispatch(setUser(loginUser))
+  }, [dispatch])
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({
+      const loginUser = {
         username,
         password,
-      })
+      }
 
+      dispatch(login(loginUser))
       setUsername("")
       setPassword("")
-      setUser(user)
-      dispatch(setNotification(`${user.name} welcome back!`))
-      storage.saveUser(user)
     } catch (exception) {
+      console.log(exception)
       dispatch(setNotification("wrong username/password", "error"))
     }
   }
@@ -79,12 +83,6 @@ const App = () => {
       user: blogToLike.user.id,
     }
     dispatch(likeBlog(likedBlog))
-    /* await blogService.update(likedBlog)
-    setBlogs(
-      blogs.map((b) =>
-        b.id === id ? { ...blogToLike, likes: blogToLike.likes + 1 } : b
-      )
-    ) */
   }
 
   const handleRemove = async (id) => {
@@ -98,11 +96,10 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    setUser(null)
-    storage.logoutUser()
+    dispatch(logout())
   }
 
-  if (!user) {
+  if (user.user === null) {
     return (
       <div>
         <h2>login to application</h2>
@@ -141,7 +138,8 @@ const App = () => {
       <Notification />
 
       <p>
-        {user.name} logged in <button onClick={handleLogout}>logout</button>
+        {user.user.name} logged in{" "}
+        <button onClick={handleLogout}>logout</button>
       </p>
 
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
@@ -154,11 +152,19 @@ const App = () => {
           blog={blog}
           handleLike={handleLike}
           handleRemove={handleRemove}
-          own={user.username === blog.user.username}
+          own={user.user.username === blog.user.username}
         />
       ))}
     </div>
   )
 }
 
-export default connect(null, { setNotification, createBlog, likeBlog })(App)
+export default connect(null, {
+  setNotification,
+  createBlog,
+  likeBlog,
+  removeBlog,
+  login,
+  logout,
+  setUser,
+})(App)
