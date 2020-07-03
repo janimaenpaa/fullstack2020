@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { connect } from "react-redux"
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
+
 import Blog from "./components/Blog"
 import Notification from "./components/Notification"
 import Togglable from "./components/Togglable"
 import NewBlog from "./components/NewBlog"
+
 import { setNotification } from "./reducers/notificationReducer"
 import {
   initializeBlogs,
@@ -13,7 +16,11 @@ import {
   removeBlog,
 } from "./reducers/blogReducer"
 import { login, logout, setUser } from "./reducers/userReducer"
+import { initializeUsers } from "./reducers/usersReducer"
 import storage from "./utils/storage"
+
+import Users from "./pages/Users"
+import User from "./pages/User"
 
 const App = () => {
   const [username, setUsername] = useState("")
@@ -37,6 +44,10 @@ const App = () => {
   useEffect(() => {
     const loginUser = storage.loadUser()
     dispatch(setUser(loginUser))
+  }, [dispatch])
+
+  useEffect(() => {
+    dispatch(initializeUsers())
   }, [dispatch])
 
   const handleLogin = async (event) => {
@@ -129,30 +140,41 @@ const App = () => {
   const byLikes = (b1, b2) => b2.likes - b1.likes
 
   return (
-    <div>
-      <h2>blogs</h2>
+    <Router>
+      <div>
+        <h2>blogs</h2>
+        <Notification />
+        <p>
+          {user.user.name} logged in{" "}
+          <button onClick={handleLogout}>logout</button>
+        </p>
+      </div>
+      <Switch>
+        <Route path="/users/:id">
+          <User />
+        </Route>
+        <Route path="/users">
+          <Users />
+        </Route>
+        <Route path="/">
+          <div>
+            <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+              <NewBlog createBlog={addBlog} />
+            </Togglable>
 
-      <Notification />
-
-      <p>
-        {user.user.name} logged in{" "}
-        <button onClick={handleLogout}>logout</button>
-      </p>
-
-      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-        <NewBlog createBlog={addBlog} />
-      </Togglable>
-
-      {blogs.sort(byLikes).map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleLike={handleLike}
-          handleRemove={handleRemove}
-          own={user.user.username === blog.user.username}
-        />
-      ))}
-    </div>
+            {blogs.sort(byLikes).map((blog) => (
+              <Blog
+                key={blog.id}
+                blog={blog}
+                handleLike={handleLike}
+                handleRemove={handleRemove}
+                own={user.user.username === blog.user.username}
+              />
+            ))}
+          </div>
+        </Route>
+      </Switch>
+    </Router>
   )
 }
 
@@ -164,4 +186,5 @@ export default connect(null, {
   login,
   logout,
   setUser,
+  initializeUsers,
 })(App)
