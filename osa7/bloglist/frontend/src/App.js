@@ -3,11 +3,13 @@ import { useSelector, useDispatch } from "react-redux"
 import { connect } from "react-redux"
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
 
+// Components
 import Blog from "./components/Blog"
 import Notification from "./components/Notification"
 import Togglable from "./components/Togglable"
 import NewBlog from "./components/NewBlog"
 
+// Reducers
 import { setNotification } from "./reducers/notificationReducer"
 import {
   initializeBlogs,
@@ -17,10 +19,14 @@ import {
 } from "./reducers/blogReducer"
 import { login, logout, setUser } from "./reducers/userReducer"
 import { initializeUsers } from "./reducers/usersReducer"
+
+// Utils
 import storage from "./utils/storage"
 
+// Pages
 import Users from "./pages/Users"
 import User from "./pages/User"
+import BlogView from "./pages/Blog"
 
 const App = () => {
   const [username, setUsername] = useState("")
@@ -155,6 +161,9 @@ const App = () => {
         </Route>
         <Route path="/users">
           <Users />
+        </Route>
+        <Route path="/blogs/:id">
+          <BlogView handleLike={handleLike} />
         </Route>
         <Route path="/">
           <div>
