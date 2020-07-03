@@ -8,6 +8,7 @@ import Blog from "./components/Blog"
 import Notification from "./components/Notification"
 import Togglable from "./components/Togglable"
 import NewBlog from "./components/NewBlog"
+import Navigation from "./components/Navigation"
 
 // Reducers
 import { setNotification } from "./reducers/notificationReducer"
@@ -148,12 +149,9 @@ const App = () => {
   return (
     <Router>
       <div>
+        <Navigation user={user.user} handleLogout={handleLogout} />
         <h2>blogs</h2>
         <Notification />
-        <p>
-          {user.user.name} logged in{" "}
-          <button onClick={handleLogout}>logout</button>
-        </p>
       </div>
       <Switch>
         <Route path="/users/:id">
