@@ -93,4 +93,38 @@ blogsRouter.put("/:id", async (request, response, next) => {
   }
 })
 
+blogsRouter.post("/:id/comments", async (request, response, next) => {
+  const body = request.body
+  const id = request.params.id
+
+  try {
+    let comments = []
+
+    const blogToBeCommented = await Blog.findById(id)
+
+    if (blogToBeCommented.comments) {
+      comments = blogToBeCommented.comments
+    }
+
+    comments = comments.concat(body.comment)
+
+    const commentedBlog = {
+      title: blogToBeCommented.title,
+      author: blogToBeCommented.author,
+      url: blogToBeCommented.url,
+      likes: blogToBeCommented.likes,
+      user: blogToBeCommented.user,
+      comments,
+    }
+    
+    const updatedBlog = await Blog.findByIdAndUpdate(id, commentedBlog, {
+      new: true,
+    })
+
+    response.json(updatedBlog.toJSON())
+  } catch (err) {
+    next(err)
+  }
+})
+
 module.exports = blogsRouter
