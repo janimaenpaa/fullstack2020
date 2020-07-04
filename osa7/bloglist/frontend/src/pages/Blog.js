@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
+import styled from "styled-components"
 
 const Blog = ({ handleLike, addComment }) => {
   const [comment, setComment] = useState("")
@@ -37,11 +38,27 @@ const Blog = ({ handleLike, addComment }) => {
     )
   }
 
+  const Button = styled.button`
+    color: palevioletred;
+    font-size: 1em;
+    border: 2px solid palevioletred;
+    border-radius: 3px;
+  `
+
+  const Link = styled.a`
+    color: palevioletred;
+    font-weight: bold;
+  `
+
+  const Title = styled.h2`
+    color: palevioletred;
+  `
+
   return (
     <div>
-      <h2>{blog ? blog.title : null}</h2>
-      <a href={blog.url}>{blog.url}</a> <br />
-      {blog.likes} likes <button onClick={() => handleLike(id)}>like</button>
+      <Title>{blog ? blog.title : null}</Title>
+      <Link href={blog.url}>{blog.url}</Link> <br />
+      {blog.likes} likes <Button onClick={() => handleLike(id)}>like</Button>
       <br />
       added by {blog.author}
       <h3>comments</h3>
@@ -50,8 +67,8 @@ const Blog = ({ handleLike, addComment }) => {
           id="comment"
           value={comment}
           onChange={({ target }) => setComment(target.value)}
-        />
-        <button type="submit">add comment</button>
+        />{" "}
+        <Button type="submit">add comment</Button>
       </form>
       {comments()}
     </div>

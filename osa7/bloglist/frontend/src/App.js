@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { connect } from "react-redux"
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import styled from "styled-components"
 
 // Components
 import Blog from "./components/Blog"
@@ -119,9 +120,20 @@ const App = () => {
     dispatch(logout())
   }
 
-  if (user.user === null) {
+  // Styling
+  const Page = styled.div`
+    padding: 2em;
+  `
+
+  const AppName = styled.h2`
+    color: #488fc2;
+    font-weight: bold;
+    font-size: 2.5em;
+  `
+
+  if (user === null) {
     return (
-      <div>
+      <Page>
         <h2>login to application</h2>
 
         <Notification />
@@ -145,48 +157,50 @@ const App = () => {
           </div>
           <button id="login">login</button>
         </form>
-      </div>
+      </Page>
     )
   }
 
   const byLikes = (b1, b2) => b2.likes - b1.likes
 
   return (
-    <Router>
-      <div>
-        <Navigation user={user.user} handleLogout={handleLogout} />
-        <h2>blogs</h2>
-        <Notification />
-      </div>
-      <Switch>
-        <Route path="/users/:id">
-          <User />
-        </Route>
-        <Route path="/users">
-          <Users />
-        </Route>
-        <Route path="/blogs/:id">
-          <BlogView handleLike={handleLike} addComment={handleComment} />
-        </Route>
-        <Route path="/">
-          <div>
-            <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-              <NewBlog createBlog={addBlog} />
-            </Togglable>
+    <Page>
+      <Router>
+        <div>
+          <Navigation user={user} handleLogout={handleLogout} />
+          <AppName>blog app</AppName>
+          <Notification />
+        </div>
+        <Switch>
+          <Route path="/users/:id">
+            <User />
+          </Route>
+          <Route path="/users">
+            <Users />
+          </Route>
+          <Route path="/blogs/:id">
+            <BlogView handleLike={handleLike} addComment={handleComment} />
+          </Route>
+          <Route path="/">
+            <div>
+              <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+                <NewBlog createBlog={addBlog} />
+              </Togglable>
 
-            {blogs.sort(byLikes).map((blog) => (
-              <Blog
-                key={blog.id}
-                blog={blog}
-                handleLike={handleLike}
-                handleRemove={handleRemove}
-                own={user.user.username === blog.user.username}
-              />
-            ))}
-          </div>
-        </Route>
-      </Switch>
-    </Router>
+              {blogs.sort(byLikes).map((blog) => (
+                <Blog
+                  key={blog.id}
+                  blog={blog}
+                  handleLike={handleLike}
+                  handleRemove={handleRemove}
+                  own={user.username === blog.user.username}
+                />
+              ))}
+            </div>
+          </Route>
+        </Switch>
+      </Router>
+    </Page>
   )
 }
 

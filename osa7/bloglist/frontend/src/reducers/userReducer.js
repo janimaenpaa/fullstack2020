@@ -1,12 +1,12 @@
 import loginService from "../services/login"
 import storage from "../utils/storage"
 
-const userReducer = (state = { user: null }, action) => {
+const userReducer = (state = null, action) => {
   switch (action.type) {
     case "LOGIN":
-      return { ...state, user: action.data }
+      return action.data
     case "LOGOUT":
-      return { ...state, user: null }
+      return (state = null)
     default:
       return state
   }
@@ -20,7 +20,7 @@ export const login = (credentials) => {
         type: "LOGIN",
         data: user,
       })
-      
+
       storage.saveUser(user)
     } catch (error) {
       console.log(error)

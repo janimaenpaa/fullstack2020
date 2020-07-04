@@ -7,8 +7,6 @@ const Users = () => {
     return users
   })
 
-  console.log(users)
-
   return (
     <div>
       <table>
