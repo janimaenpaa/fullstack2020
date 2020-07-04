@@ -17,6 +17,7 @@ import {
   createBlog,
   likeBlog,
   removeBlog,
+  addComment,
 } from "./reducers/blogReducer"
 import { login, logout, setUser } from "./reducers/userReducer"
 import { initializeUsers } from "./reducers/usersReducer"
@@ -110,6 +111,10 @@ const App = () => {
     }
   }
 
+  const handleComment = async (id, comment) => {
+    dispatch(addComment(id, comment))
+  }
+
   const handleLogout = () => {
     dispatch(logout())
   }
@@ -161,7 +166,7 @@ const App = () => {
           <Users />
         </Route>
         <Route path="/blogs/:id">
-          <BlogView handleLike={handleLike} />
+          <BlogView handleLike={handleLike} addComment={handleComment} />
         </Route>
         <Route path="/">
           <div>
@@ -190,6 +195,7 @@ export default connect(null, {
   createBlog,
   likeBlog,
   removeBlog,
+  addComment,
   login,
   logout,
   setUser,
