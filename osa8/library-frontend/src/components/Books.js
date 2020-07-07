@@ -15,7 +15,6 @@ const Books = (props) => {
   }
 
   const books = result.data.allBooks
-  console.log(books)
 
   const allGenres = () => {
     let genres = []
