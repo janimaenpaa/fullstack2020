@@ -29,9 +29,13 @@ const getRating = (averageExercise: number, targetExercise: number): number => {
 }
 
 const calculateExercises = (
-  args: Array<number>,
-  target: number
+  target: number,
+  args: Array<number>
 ): resultValues => {
+  if (args.length === 0) throw new Error("No values provided")
+  if (args.includes(NaN) || isNaN(target))
+    throw new Error("Provided values were not numbers!")
+
   const periodLength = args.length
   const trainingDays = args.filter((day) => day !== 0).length
   const average = args.reduce((a, b) => a + b, 0) / args.length
@@ -54,5 +58,6 @@ const calculateExercises = (
   }
 }
 
-const array = [3, 0, 2, 4.5, 0, 3, 1]
-console.log(calculateExercises(array, 2))
+const target = Number(process.argv[2])
+const array = process.argv.slice(3).map((i) => Number(i))
+console.log(calculateExercises(target, array))
