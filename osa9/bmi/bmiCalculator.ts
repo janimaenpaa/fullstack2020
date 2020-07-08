@@ -1,5 +1,4 @@
 const calculateBmi = (height: number, weight: number): string => {
-  console.log(weight)
   if (isNaN(height) || isNaN(weight)) {
     throw new Error(
       "Provided values were not numbers or not enough args provided"
@@ -27,6 +26,10 @@ const calculateBmi = (height: number, weight: number): string => {
   }
 }
 
-const h: number = Number(process.argv[2])
-const w: number = Number(process.argv[3])
-console.log(calculateBmi(h, w))
+if (process.argv[2]) {
+  const h: number = Number(process.argv[2])
+  const w: number = Number(process.argv[3])
+  console.log(calculateBmi(h, w));
+}
+
+export { calculateBmi }

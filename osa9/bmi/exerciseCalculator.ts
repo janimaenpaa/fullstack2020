@@ -61,3 +61,4 @@ const calculateExercises = (
 const target = Number(process.argv[2])
 const array = process.argv.slice(3).map((i) => Number(i))
 console.log(calculateExercises(target, array))
+
