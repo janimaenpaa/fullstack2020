@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { Icon } from "semantic-ui-react";
 
 import { Patient } from "../types";
-import { useStateValue } from "../state";
+import { useStateValue, updatePatient } from "../state";
 import { apiBaseUrl } from "../constants";
 
 const PatientPage: React.FC = () => {
@@ -19,7 +19,7 @@ const PatientPage: React.FC = () => {
           const { data: patientFromApi } = await axios.get<Patient>(
             `${apiBaseUrl}/patients/${id}`
           );
-          dispatch({ type: "UPDATE_PATIENT", payload: patientFromApi });
+          dispatch(updatePatient(patientFromApi));
           console.log("tiikeri");
         } catch (e) {
           console.error(e);
@@ -39,7 +39,7 @@ const PatientPage: React.FC = () => {
             return (<Icon name="genderless"/>)
       }
   }
-  
+
   return (
     <div className="App">
       <h2>{patient?.name} {patientGender()}</h2>

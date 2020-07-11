@@ -1,4 +1,4 @@
-import { State, StateContext } from "./state";
+import { State } from "./state";
 import { Patient } from "../types";
 
 export type Action =
@@ -49,5 +49,26 @@ export const reducer = (state: State, action: Action): State => {
       };
     default:
       return state;
+  }
+};
+
+export const setPatientList = (patientList: Patient[]): Action => {
+  return {
+    type: "SET_PATIENT_LIST",
+    payload: patientList,
+  };
+};
+
+export const addPatient = (patient: Patient): Action => {
+  return {
+    type: "ADD_PATIENT",
+    payload: patient,
+  };
+};
+
+export const updatePatient = (patient: Patient): Action => {
+  return {
+    type: "UPDATE_PATIENT",
+    payload: patient 
   }
 };
