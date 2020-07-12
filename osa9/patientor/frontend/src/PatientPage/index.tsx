@@ -35,7 +35,7 @@ const PatientPage: React.FC = () => {
   if (!patient) return <div>No patient data found</div>;
 
   const patientGender = () => {
-    switch (patient?.gender) {
+    switch (patient.gender) {
       case "male":
         return <Icon name="man" />;
       case "female":
@@ -55,13 +55,10 @@ const PatientPage: React.FC = () => {
         occupation: {patient.occupation}
       </p>
       <h3>entries</h3>
-      {patient.entries.length > 0 ? (
+      {patient.entries &&
         patient.entries.map((entry) => (
           <EntryDetails key={entry.id} entry={entry} />
-        ))
-      ) : (
-        <p>No entries</p>
-      )}
+        ))}
     </div>
   );
 };
