@@ -1,23 +1,30 @@
 import React from "react";
 
-import { useStateValue } from "../state";
 import { Entry, Diagnosis } from "../types";
+import HospitalEntryDetails from "./HospitalEntryDetails";
+import OccupationalHealthcareEntryDetails from "./OccupationalHealthcareEntryDetails";
+import HealthCheckEntryDetails from "./HealthCheckEntryDetails";
 
 const EntryDetails: React.FC<{ entry: Entry }> = ({ entry }) => {
-  const [{ diagnoses }, dispatch] = useStateValue();
-
-  const getDiagnosisName = (code: string): string => {
-    const codeNameNotFound = "";
-    const diagnosis = Object.values(diagnoses).find(
-      (d: Diagnosis) => d.code === code
+  const assertNever = (value: never): never => {
+    throw new Error(
+      `Unhandled discriminated union member: ${JSON.stringify(value)}`
     );
-    if (diagnosis) {
-      return diagnosis.name;
-    }
-    return codeNameNotFound;
   };
 
-  return (
+  switch (entry.type) {
+    case "Hospital":
+      return <HospitalEntryDetails entry={entry} />;
+    case "OccupationalHealthcare":
+      return <OccupationalHealthcareEntryDetails entry={entry} />;
+    case "HealthCheck":
+      return <HealthCheckEntryDetails entry={entry} />;
+    default:
+      return assertNever(entry);
+  }
+};
+
+/*  return (
     <div>
       {entry.date} {entry.description}
       <ul>
@@ -30,6 +37,6 @@ const EntryDetails: React.FC<{ entry: Entry }> = ({ entry }) => {
       </ul>
     </div>
   );
-};
+}; */
 
 export default EntryDetails;
