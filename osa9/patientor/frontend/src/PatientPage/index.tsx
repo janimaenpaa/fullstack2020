@@ -1,14 +1,12 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { useStateValue } from "../state";
+import { updatePatient, useStateValue } from "../state";
 import { apiBaseUrl } from "../constants";
 import { Gender, Patient } from "../types";
 import { Header, Icon } from "semantic-ui-react";
 
-interface Props {}
-
-const PatientPage: React.FC = (props: Props) => {
+const PatientPage: React.FC = () => {
   const [{ patients }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
   const patient = Object.values(patients).find((p) => p.id === id);
@@ -21,7 +19,7 @@ const PatientPage: React.FC = (props: Props) => {
             `${apiBaseUrl}/patients/${id}`
           );
           console.log(data);
-          dispatch({ type: "UPDATE_PATIENT", payload: data });
+          dispatch(updatePatient(data));
         } catch (e) {
           console.error(e);
         }
