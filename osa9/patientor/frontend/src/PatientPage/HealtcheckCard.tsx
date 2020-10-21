@@ -4,11 +4,11 @@ import { Card, Icon, Header } from "semantic-ui-react";
 
 const getHeart = (rating: HealthCheckRating) => {
   switch (rating) {
-    case 1:
+    case HealthCheckRating.LowRisk:
       return <Icon name="heart" color="yellow" />;
-    case 2:
+    case HealthCheckRating.HighRisk:
       return <Icon name="heart" color="orange" />;
-    case 3:
+    case HealthCheckRating.CriticalRisk:
       return <Icon name="heart" color="red" />;
     default:
       return <Icon name="heart" color="green" />;
