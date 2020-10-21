@@ -5,6 +5,7 @@ import { updatePatient, useStateValue } from "../state";
 import { apiBaseUrl } from "../constants";
 import { Gender, Patient } from "../types";
 import { Header, Icon } from "semantic-ui-react";
+import EntryDetails from "./EntryDetails";
 
 const PatientPage: React.FC = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -54,15 +55,7 @@ const PatientPage: React.FC = () => {
       </p>
       <Header as="h3">entries</Header>
       {Object.values(patient.entries).map((entry) => (
-        <div key={entry.id}>
-          {entry.date}{" "}
-          <i>{entry.description}</i>
-          <ul>
-            {entry.diagnosisCodes?.map((code, index) => (
-              <li key={index}>{code}</li>
-            ))}
-          </ul>
-        </div>
+        <EntryDetails key={entry.id} entry={entry} />
       ))}
     </div>
   );
