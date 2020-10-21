@@ -4,9 +4,13 @@ import { Card, Icon, Header } from "semantic-ui-react";
 
 const OccupationalHealthcareCard: React.FC<{ entry: OccupationalHealthcareEntry }> = ({ entry }) => {
   return (
-    <Card>
+    <Card fluid>
       <Card.Content>
-        <Card.Header content={entry.date} />
+        <Card.Header>
+          <Header as="h3">
+            {entry.date} {<Icon name="stethoscope" />} {entry.employerName}
+          </Header>
+        </Card.Header>
         <Card.Description content={entry.description} />
       </Card.Content>
     </Card>
