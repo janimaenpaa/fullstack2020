@@ -1,6 +1,6 @@
 import express from "express";
 import patientService from "../services/patientService";
-import toNewPatienEntry from "../utils";
+import { toNewPatienEntry, toNewEntry } from "../utils";
 
 const router = express.Router();
 
@@ -15,6 +15,20 @@ router.get("/:id", (req, res) => {
     res.send(patient);
   } else {
     res.sendStatus(404);
+  }
+});
+
+router.post("/:id/entries", (req, res) => {
+  try {
+    const patient = patientService.findById(req.params.id);
+    const newEntry = toNewEntry(req.body);
+
+    if (patient) {
+      const addedEntry = patientService.addEntry(patient, newEntry);
+      res.json(addedEntry);
+    }
+  } catch (e) {
+    res.status(404).send(e.message);
   }
 });
 
