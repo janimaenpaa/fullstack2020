@@ -95,7 +95,7 @@ const parseHealthCheckRating = (rating: any): HealthCheckRating => {
 };
 
 const parseEmployerName = (employerName: any): string => {
-  if (!employerName || isString(employerName)) {
+  if (!employerName || !isString(employerName)) {
     throw new Error("Incorrect or missing employer name: " + employerName);
   }
   return employerName;
