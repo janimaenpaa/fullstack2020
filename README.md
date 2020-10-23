@@ -9,7 +9,7 @@ Assignments for Full Stack Open 2020 of University of Helsinki.
 |  0   | 6         | [Fundamentals of Web apps](https://github.com/janimaenpaa/fullstack2020/tree/master/osa0)                                     |
 |  1   | 14        | [Introduction to React](https://github.com/janimaenpaa/fullstack2020/tree/master/osa1)                                        |
 |  2   | 20        | [Communicating with server](https://github.com/janimaenpaa/fullstack2020/tree/master/osa2)                                    |
-|  3   | 22        | [Programming a server with NodeJS and Express](https://github.com/janimaenpaa/fullstack2020/tree/master/osa3)                 |
+|  3   | 22        | [Programming a server with NodeJS and Express](https://github.com/janimaenpaa/phonebook)                                      |
 |  4   | 21        | [Testing Express servers, user administration](https://github.com/janimaenpaa/fullstack2020/tree/master/osa4)                 |
 |  5   | 21        | [Testing React apps](https://github.com/janimaenpaa/fullstack2020/tree/master/osa5)                                           |
 |  6   | 21        | [State management with Redux](https://github.com/janimaenpaa/fullstack2020/tree/master/osa6)                                  |
